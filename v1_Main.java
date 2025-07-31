@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class v1_Main {
 
     public static class Guests {
         private int roomId;
