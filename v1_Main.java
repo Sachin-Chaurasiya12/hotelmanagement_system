@@ -119,7 +119,7 @@ public class v1_Main {
             }
 
             System.out.println("Guest record added successfully.\n");
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
