@@ -61,6 +61,7 @@ public class v1_Main {
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+        
         int command;
         do {
             System.out.println("\n------------- Welcome to our hotel -------------");
