@@ -2,57 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class v1_Main {
-
-    public static class Guests {
-        private int roomId;
-        private String name;
-        private String roompartner;
-        private int age;
-        private String idproof;
-
-        public Guests(int roomId, String name, String roompartner, int age, String idproof) {
-            this.roomId = roomId;
-            this.name = name;
-            this.roompartner = roompartner;
-            this.age = age;
-            this.idproof = idproof;
-        }
-
-        public int getId() {
-            return roomId;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String toFileString() {
-            return roomId + "," + name + "," + roompartner + "," + age + "," + idproof;
-        }
-
-        public static Guests fromfilestring(String line) {
-            try {
-                if (line.trim().isEmpty())
-                    return null;
-                String[] parts = line.split(",");
-                if (parts.length == 5) {
-                    int roomId = Integer.parseInt(parts[0].trim());
-                    String name = parts[1].trim();
-                    String roompartner = parts[2].trim();
-                    int age = Integer.parseInt(parts[3].trim());
-                    String idproof = parts[4].trim();
-                    return new Guests(roomId, name, roompartner, age, idproof);
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid data line: " + line);
-            }
-            return null;
-        }
-
-        @Override
-        public String toString() {
-            return roomId + ": name: " + name + " | roompartner: " + roompartner + " | Age: " + age + " | Id proof: " + idproof;
-        }
+    public class Version {
+        public static final String CURRENT_VERSION = "v1.1.0";
     }
 
     static final String filename = "data.txt";
@@ -62,11 +13,14 @@ public class v1_Main {
 
     public static void main(String[] args) {
         int command;
+        System.out.println();
+        System.out.println("Hotel Management System - Version " + Version.CURRENT_VERSION);
         do {
             System.out.println("\n------------- Welcome to our hotel -------------");
             System.out.println("1. Book your room");
             System.out.println("2. Room allotting");
-            System.out.println("3. Exit the Program");
+            System.out.println("3. View alloted room");
+            System.out.println("4. Exit the Program");
             System.out.print("Enter your task: ");
             command = sc.nextInt();
             sc.nextLine(); // consume newline
@@ -74,10 +28,11 @@ public class v1_Main {
             switch (command) {
                 case 1 -> bookingroom();
                 case 2 -> roomalloting();
-                case 3 -> exitProgram();
+                case 3 -> Viewallotedroom();
+                case 4 -> exitProgram();
                 default -> System.out.println("Invalid option");
             }
-        } while (command != 3);
+        } while (command != 4);
     }
 
     static void bookingroom() {
@@ -155,37 +110,79 @@ public class v1_Main {
                 return;
             }
 
+            Guests targetGuest = null;
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
                 while ((line = br.readLine()) != null) {
                     Guests g = Guests.fromfilestring(line);
                     if (g != null && g.getId() == id) {
-                        System.out.print("Allot guest to which room number (e.g.,101, 102): ");
-                        String customRoomNo = sc.nextLine().trim();
-
-                        try (
-                            BufferedWriter bw1 = new BufferedWriter(new FileWriter(alloting, true));
-                            BufferedWriter bw2 = new BufferedWriter(new FileWriter(roomstatus, true))
-                        ) {
-                            if (new File(alloting).length() > 0)
-                                bw1.newLine();
-                            if (new File(roomstatus).length() > 0)
-                                bw2.newLine();
-
-                            bw1.write("Guest " + g.getName() + " (ID: " + g.getId() + ") allotted to Room " + customRoomNo);
-                            bw2.write("Room " + customRoomNo + " status: Occupied by Guest ID " + g.roomId);
-                        }
-
-                        System.out.println("Room successfully allotted to room number: " + customRoomNo);
-                        return;
+                        targetGuest = g;
+                        break;
                     }
                 }
             }
 
-            System.out.println("Room ID not found.");
+            if (targetGuest == null) {
+                System.out.println("Guest ID not found.");
+                return;
+            }
+
+            System.out.print("Allot guest to which room number (e.g.,101, 102): ");
+            String customRoomNo = sc.nextLine().trim();
+
+            try (
+                BufferedWriter bw1 = new BufferedWriter(new FileWriter(alloting, true))
+            ) {
+                if (new File(alloting).length() > 0)
+                    bw1.newLine();
+                bw1.write("Guest " + targetGuest.getName() + " (ID: " + targetGuest.getId() + ") allotted to Room " + customRoomNo);
+            }
+
+            // Room status update using temp file
+            File originalFile = new File(roomstatus);
+            File tempFile = new File("temp.txt");
+            boolean updated = false;
+
+            if (!originalFile.exists()) {
+                originalFile.createNewFile();
+            }
+
+            try (
+                BufferedReader br2 = new BufferedReader(new FileReader(originalFile));
+                BufferedWriter bw2 = new BufferedWriter(new FileWriter(tempFile))
+            ) {
+                String line;
+                while ((line = br2.readLine()) != null) {
+                    if (line.startsWith("Room " + customRoomNo + " status:")) {
+                        bw2.write("Room " + customRoomNo + " status: Occupied by Guest ID " + targetGuest.getId());
+                        updated = true;
+                    } else {
+                        bw2.write(line);
+                    }
+                    bw2.newLine();
+                }
+            }
+
+            if (!updated) {
+                try (BufferedWriter bw2 = new BufferedWriter(new FileWriter(tempFile, true))) {
+                    bw2.write("Room " + customRoomNo + " status: Occupied by Guest ID " + targetGuest.getId());
+                    bw2.newLine();
+                }
+            }
+
+            originalFile.delete();
+            tempFile.renameTo(originalFile);
+
+            System.out.println("Room successfully allotted to room id: " + targetGuest.getId());
+
         } catch (Exception e) {
             System.out.println("Error during room allotment: " + e.getMessage());
         }
+    }
+
+    static void Viewallotedroom(){
+        alloting alot = new alloting();
+        alot.option();
     }
 
     static void exitProgram() {
