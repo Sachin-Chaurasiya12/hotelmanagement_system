@@ -3,7 +3,7 @@ import java.util.*;
 
 public class v1_Main {
     public class Version {
-        public static final String CURRENT_VERSION = "v1.1.0";
+        public static final String CURRENT_VERSION = "v1.2.0";
     }
 
     static final String filename = "data.txt";
@@ -20,7 +20,8 @@ public class v1_Main {
             System.out.println("1. Book your room");
             System.out.println("2. Room allotting");
             System.out.println("3. View alloted room");
-            System.out.println("4. Exit the Program");
+            System.out.println("4. View roomstatus");
+            System.out.println("5. Exit the Program");
             System.out.print("Enter your task: ");
             command = sc.nextInt();
             sc.nextLine(); // consume newline
@@ -29,10 +30,11 @@ public class v1_Main {
                 case 1 -> bookingroom();
                 case 2 -> roomalloting();
                 case 3 -> Viewallotedroom();
-                case 4 -> exitProgram();
+                case 4 -> roomstatus();
+                case 5 -> exitProgram();
                 default -> System.out.println("Invalid option");
             }
-        } while (command != 4);
+        } while (command != 5);
     }
 
     static void bookingroom() {
@@ -196,5 +198,9 @@ public class v1_Main {
             }
         }
         System.out.println("\nProgram ended.");
+    }
+    static void roomstatus(){
+        statuschecker check = new statuschecker();
+        check.status();
     }
 }
