@@ -3,7 +3,7 @@ import java.util.*;
 
 public class v1_Main {
     public class Version {
-        public static final String CURRENT_VERSION = "v1.2.0";
+        public static final String CURRENT_VERSION = "v1.2.1";
     }
 
     static final String filename = "data.txt";
