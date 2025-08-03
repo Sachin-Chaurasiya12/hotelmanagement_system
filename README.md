@@ -13,5 +13,10 @@ This program is a version 1 full released verion of hotal management system.
 This ia a console based program but i will better try to make it work on GUI and it is also a file based program. <br>
 It is best system for a low end usage.
 
-![hotelmanagement-system](console.png)<br>
+<!-- ![hotelmanagement-system](console.png) <br> -->
+<p align="center">
+  <img src="console.png" width="400" alt="Booking Screen"/>
+  <br>
+  <em>Figure 1: Room booking screen with input fields</em>
+</p>
 This is the output of the console based hotel management system now you can perform any task.
