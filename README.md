@@ -14,4 +14,4 @@ This ia a console based program but i will better try to make it work on GUI and
 It is best system for a low end usage.
 
 ![hotelmanagement-system](console.png)<br>
-This is the out of the console based hotel management system now you can perform any task.
+This is the output of the console based hotel management system now you can perform any task.
