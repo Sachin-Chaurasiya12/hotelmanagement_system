@@ -13,5 +13,5 @@ This program is a version 1 full released verion of hotal management system.
 This ia a console based program but i will better try to make it work on GUI and it is also a file based program. <br>
 It is best system for a low end usage.
 
-<img src="console" alt="This is an image", height="500px", width="850px">
+<img src="D:\programming\hotalmanagementsystem\console.png" alt="Hotel System" width="400"/>
 This is the out of the console based hotel management system now you can perform any task.
