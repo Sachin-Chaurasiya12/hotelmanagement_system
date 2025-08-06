@@ -1,7 +1,7 @@
 # hotelmanagement-system
 This is program to manage the bookin system of hotel.
 <br>
-This program is a version 1 full released verion of hotal management system.
+This program is a version 1 full released version of hotal management system.
 <br>
 # Features : <br>
 1. Regestring guest
