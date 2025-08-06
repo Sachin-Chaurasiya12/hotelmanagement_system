@@ -13,8 +13,8 @@ public class alloting {
 
     if (options == 1) {
         alloted();
-    } else {
-        allotsingle();
+    } else if(options == 2) {
+        allotall();
     }
     }
     public void alloted(){
@@ -48,7 +48,7 @@ public class alloting {
         }
         System.out.println();
     }
-    public void allotsingle(){
+    public void allotall(){
         File file = new File("allotroom.txt");
         if(!file.exists()){
             System.out.println("File not found .");
@@ -61,7 +61,6 @@ public class alloting {
                 while ((line = br.readLine()) != null) {
                         System.out.println(" Allotted Room Info: \n" + line);
                         found = true;
-                        break;
                 }
             }
             if(!found){
