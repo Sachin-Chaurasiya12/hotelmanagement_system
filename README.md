@@ -15,7 +15,7 @@ It is best system for a low end usage.
 
 <!-- ![hotelmanagement-system](console.png) <br> -->
 <p align="center">
-  <img src="console.png" width="400" alt="Booking Screen"/>
+  <img src="console2.png" width="400" alt="Booking Screen"/>
   <br>
   <em>Figure 1: Room booking screen with input fields</em>
 </p>
