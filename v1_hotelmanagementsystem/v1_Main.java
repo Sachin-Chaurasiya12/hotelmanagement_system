@@ -1,4 +1,3 @@
-package v1_hotelmanagementsystem;
 import java.io.*;
 import java.util.*;
 
