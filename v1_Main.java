@@ -101,6 +101,87 @@ public class v1_Main {
         }
         return false;
     }
+    static void roomalloting() {
+        try {
+            System.out.print("Enter the guest's room ID to allot: ");
+            int id = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            File file = new File(filename);
+            if (!file.exists()) {
+                System.out.println("No guest data available.");
+                return;
+            }
+
+            Guests targetGuest = null;
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    Guests g = Guests.fromfilestring(line);
+                    if (g != null && g.getId() == id) {
+                        targetGuest = g;
+                        break;
+                    }
+                }
+            }
+
+            if (targetGuest == null) {
+                System.out.println("Guest ID not found.");
+                return;
+            }
+
+            System.out.print("Allot guest to which room number (e.g.,101, 102): ");
+            String customRoomNo = sc.nextLine().trim();
+
+            try (
+                BufferedWriter bw1 = new BufferedWriter(new FileWriter(alloting, true))
+            ) {
+                if (new File(alloting).length() > 0)
+                    bw1.newLine();
+                bw1.write("Guest " + targetGuest.getName() + " (ID: " + targetGuest.getId() + ") allotted to Room " + customRoomNo);
+            }
+
+            // Room status update using temp file
+            File originalFile = new File(roomstatus);
+            File tempFile = new File("temp.txt");
+            boolean updated = false;
+
+            if (!originalFile.exists()) {
+                originalFile.createNewFile();
+            }
+
+            try (
+                BufferedReader br2 = new BufferedReader(new FileReader(originalFile));
+                BufferedWriter bw2 = new BufferedWriter(new FileWriter(tempFile))
+            ) {
+                String line;
+                while ((line = br2.readLine()) != null) {
+                    if (line.startsWith("Room " + customRoomNo + " status:")) {
+                        bw2.write("Room " + customRoomNo + " status: Occupied by Guest ID " + targetGuest.getId());
+                        updated = true;
+                    } else {
+                        bw2.write(line);
+                    }
+                    bw2.newLine();
+                }
+            }
+
+            if (!updated) {
+                try (BufferedWriter bw2 = new BufferedWriter(new FileWriter(tempFile, true))) {
+                    bw2.write("Room " + customRoomNo + " status: Occupied by Guest ID " + targetGuest.getId());
+                    bw2.newLine();
+                }
+            }
+
+            originalFile.delete();
+            tempFile.renameTo(originalFile);
+
+            System.out.println("Room successfully allotted to room id: " + targetGuest.getId());
+
+        } catch (Exception e) {
+            System.out.println("Error during room allotment: " + e.getMessage());
+        }
+    }
 
     static void Viewallotedroom(){
         alloting alot = new alloting();
