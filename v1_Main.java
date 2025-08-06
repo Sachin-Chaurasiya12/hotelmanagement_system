@@ -3,7 +3,7 @@ import java.util.*;
 
 public class v1_Main {
     public class Version {
-        public static final String CURRENT_VERSION = "v1.2.1";
+        public static final String CURRENT_VERSION = "v1.3.1";
     }
 
     static final String filename = "data.txt";
@@ -21,7 +21,8 @@ public class v1_Main {
             System.out.println("2. Room allotting");
             System.out.println("3. View alloted room");
             System.out.println("4. View roomstatus");
-            System.out.println("5. Exit the Program");
+            System.out.println("5. Manage Rooms");
+            System.out.println("6. Exit the Program");
             System.out.print("Enter your task: ");
             command = sc.nextInt();
             sc.nextLine(); // consume newline
@@ -31,10 +32,11 @@ public class v1_Main {
                 case 2 -> roomalloting();
                 case 3 -> Viewallotedroom();
                 case 4 -> roomstatus();
-                case 5 -> exitProgram();
+                case 5 -> managebooking();
+                case 6 -> exitProgram();
                 default -> System.out.println("Invalid option");
             }
-        } while (command != 5);
+        } while (command != 6);
     }
 
     static void bookingroom() {
@@ -100,93 +102,15 @@ public class v1_Main {
         return false;
     }
 
-    static void roomalloting() {
-        try {
-            System.out.print("Enter the guest's room ID to allot: ");
-            int id = sc.nextInt();
-            sc.nextLine(); // consume newline
-
-            File file = new File(filename);
-            if (!file.exists()) {
-                System.out.println("No guest data available.");
-                return;
-            }
-
-            Guests targetGuest = null;
-            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    Guests g = Guests.fromfilestring(line);
-                    if (g != null && g.getId() == id) {
-                        targetGuest = g;
-                        break;
-                    }
-                }
-            }
-
-            if (targetGuest == null) {
-                System.out.println("Guest ID not found.");
-                return;
-            }
-
-            System.out.print("Allot guest to which room number (e.g.,101, 102): ");
-            String customRoomNo = sc.nextLine().trim();
-
-            try (
-                BufferedWriter bw1 = new BufferedWriter(new FileWriter(alloting, true))
-            ) {
-                if (new File(alloting).length() > 0)
-                    bw1.newLine();
-                bw1.write("Guest " + targetGuest.getName() + " (ID: " + targetGuest.getId() + ") allotted to Room " + customRoomNo);
-            }
-
-            // Room status update using temp file
-            File originalFile = new File(roomstatus);
-            File tempFile = new File("temp.txt");
-            boolean updated = false;
-
-            if (!originalFile.exists()) {
-                originalFile.createNewFile();
-            }
-
-            try (
-                BufferedReader br2 = new BufferedReader(new FileReader(originalFile));
-                BufferedWriter bw2 = new BufferedWriter(new FileWriter(tempFile))
-            ) {
-                String line;
-                while ((line = br2.readLine()) != null) {
-                    if (line.startsWith("Room " + customRoomNo + " status:")) {
-                        bw2.write("Room " + customRoomNo + " status: Occupied by Guest ID " + targetGuest.getId());
-                        updated = true;
-                    } else {
-                        bw2.write(line);
-                    }
-                    bw2.newLine();
-                }
-            }
-
-            if (!updated) {
-                try (BufferedWriter bw2 = new BufferedWriter(new FileWriter(tempFile, true))) {
-                    bw2.write("Room " + customRoomNo + " status: Occupied by Guest ID " + targetGuest.getId());
-                    bw2.newLine();
-                }
-            }
-
-            originalFile.delete();
-            tempFile.renameTo(originalFile);
-
-            System.out.println("Room successfully allotted to room id: " + targetGuest.getId());
-
-        } catch (Exception e) {
-            System.out.println("Error during room allotment: " + e.getMessage());
-        }
-    }
-
     static void Viewallotedroom(){
         alloting alot = new alloting();
         alot.option();
     }
 
+    static void managebooking(){
+        managebooking m = new managebooking();
+        m.manage();
+    }
     static void exitProgram() {
         System.out.print("Exiting the program");
         for (int i = 0; i < 3; i++) {
