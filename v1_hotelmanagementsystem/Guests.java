@@ -1,4 +1,3 @@
-
 public class Guests {
     private int roomId;
     private String name;
@@ -41,9 +40,6 @@ public class Guests {
         try {
             if (line.trim().isEmpty())
                 return null;
-            if (line.startsWith("vacant ")) {
-                line = line.replaceFirst("vacant ", ""); // Remove "vacant " before parsing
-            }
             String[] parts = line.split(",");
             if (parts.length == 5) {
                 int roomId = Integer.parseInt(parts[0].trim());
