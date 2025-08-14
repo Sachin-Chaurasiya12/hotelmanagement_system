@@ -1,0 +1,9 @@
+{
+    "files.exclude": {
+        "**/v1_hotelmanagementsystem": true,
+        "**/target": true,
+        "**/.classpath": true,
+        "**/.project": true
+    },
+    "java.project.explorer.showNonJavaResources": false
+}
