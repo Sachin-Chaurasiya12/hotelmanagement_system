@@ -1,5 +1,31 @@
-package Alloting_modules;
+/*
+ *  Copyright 2025 Sachin chaurasiya.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  ---------------------------------------------------------------------------
+ *  File : Alloting_g.java
+ *  description : handles the client side operation, using the features like 
+ *  regestration,alloting room,managing and viewing records of guest and rooms
+ *  Author : Sachin Chaurasiya  
+ *  Created : August 2025
+ */
 
+package Alloting_modules;
+/*
+ * Returs the components and connection for database connection 
+ * and data structures.
+ */
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +33,10 @@ import java.util.Scanner;
 import database_repository.dataconn;
 
 public class Alloting_g {
-
+    /*
+     * Stores the the data o room_no,id,roomtype,rate and status if
+     * the room is available or not.
+     */
     public static class InnerAlloting_g {
         private int room_no;
         private int id;
@@ -29,6 +58,9 @@ public class Alloting_g {
         public String getstatus(){return status;};
     }
     static final Scanner sc = new Scanner(System.in);
+    /*
+     * Structure of the Alloting room interface.
+     */
     public void alloting(){
         System.out.println("1. Enter room data");
         System.out.println("2. Allot room");

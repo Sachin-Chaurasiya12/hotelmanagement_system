@@ -1,13 +1,41 @@
+/*
+ *  Copyright 2025 Sachin chaurasiya.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  ---------------------------------------------------------------------------
+ *  File : Mainfile.java
+ *  description : handles the client side operation, using the features like 
+ *  regestration,alloting room,managing and viewing records of guest and rooms
+ *  Author : Sachin Chaurasiya  
+ *  Created : August 2025
+ */
+
 package HMS_module;
 
+/* 
+ * These are all the imports which are required to connect all the other classes 
+ * and files of this Hotel Management System program. 
+ */
 import java.util.Scanner;
-
 import Alloting_modules.Alloting_g;
-
 import java.sql.*;
 import database_repository.*;
-import register_model.guest_rec;
-
+import register_model.classes.src.java.records.guest_rec;
+/*
+ * Returns the version of this program and consist the global scanner
+ * for this project.
+ */
 public class Mainfile {
     static final Scanner sc = new Scanner(System.in);
     public class Version {
@@ -15,7 +43,7 @@ public class Mainfile {
     }
     public static void main(String[] args) {
 
-        try {
+        try { 
             dataconn.initDataSource();
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +55,8 @@ public class Mainfile {
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
-            e.printStackTrace();
+              Thread.currentThread().interrupt();
+            System.out.println("Thread was interrupted, stopping operation...");
         }
 
         int command;
@@ -57,7 +86,8 @@ public class Mainfile {
                         Thread.sleep(1000);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                      Thread.currentThread().interrupt();
+                      System.out.println("Thread was interrupted, stopping operation...");
                 }
                 System.out.println("\nThank you for using Hotel Management System!");
                 break;
@@ -68,7 +98,11 @@ public class Mainfile {
         }
         } while (command != 5);
     }
-
+    /*
+     * register() collects guest data from another class and efficiently
+     *  inserts all guest records into the SQL database in one go, using batch
+     *  processing for performance.
+     */
     static void register() {
 
         try (Connection con = dataconn.getConnection()) {
@@ -76,7 +110,10 @@ public class Mainfile {
             var guests =  gr.register_guest();
             String sql = "INSERT INTO guest_records (id, name, address, partners, phone, checkin, checkout) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            
+            /*
+             * Values are accepted from the input field and through 
+             * guest class it store value in database.
+             */
             for (var guest : guests) {
                 pstmt.setInt(1, guest.getId());
                 pstmt.setString(2, guest.getName());
@@ -99,6 +136,9 @@ public class Mainfile {
             e.printStackTrace();
         }
     }
+    /*
+     * Returs the value of alloting and store in the database.
+     */
     static void alloting(){
         Alloting_g ag = new Alloting_g();
         ag.alloting();
