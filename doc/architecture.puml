@@ -1,0 +1,68 @@
+' click alt + D to view the arhitecture of the whole project,
+' to view the project without any problem download plantUML extension from the extensions and download the graphicviz file
+' from the internet. 
+' any class or unique file you are adding and deleting must be added in this uml so that it can improve the architecture 
+' of the program and others can also understand it.
+
+@startuml
+
+skinparam linetype ortho
+package HMS_module as HMS {
+    class Mainfile {
+        + register()
+        + Allotroom()
+        + Viewrecords() 
+        + Managerecords()
+        # database()
+    }
+}
+
+package register_model as Register {
+    class guest_rec {
+        + register_guest()
+    }
+    class Innerguest_rec{
+        -id : int
+        -name : String
+        -address : String
+        -numberofpartners : int
+        -phone : String
+        -checkin : Date
+        -checkout : Date
+    }
+}
+
+package database_repository as Database {
+    class dataconn{
+        #initDatasource()
+        #getConnection()
+    }
+}
+package Alloting_modules as allot{
+    class Alloting_g{
+        -room_no : int
+        -id :int
+        -type : String
+        -rate : String
+        -status : String
+
+    }
+}
+package Management as manage{
+    class view_g_data{
+        +View_g_record()
+        +view_r_status()
+    }
+    class updaterec_g{
+        +update_g_rec
+        +update_a_rec
+    }
+    class deleterec_g{
+        +delete_g_rec
+    }
+}
+
+HMS -right-> Register
+HMS <-up- Database 
+allot<-down-Register
+@enduml
